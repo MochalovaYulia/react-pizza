@@ -6,6 +6,11 @@ export const Sort = () => {
     const [activeSort, setActiveSort] = useState('0');
     const sort = ['популярности', 'цене', 'алфавиту']
 
+    const onClickSort = (index) => {
+        setActiveSort(index)
+        setOpen(false)
+    }
+
     return (
         <div className="sort">
             <div className="sort__label">
@@ -30,7 +35,7 @@ export const Sort = () => {
                         <ul>
                             {
                                 sort.map((item, index) => (
-                                    <li key={index} onClick={() => setActiveSort(index)} className={activeSort === index ? 'active' : ''}>{item}</li>
+                                    <li key={index} onClick={() => onClickSort(index)} className={activeSort === index ? 'active' : ''}>{item}</li>
                                 ))
                             }
                         </ul>
