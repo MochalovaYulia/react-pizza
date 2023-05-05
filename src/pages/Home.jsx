@@ -8,19 +8,20 @@ export const Home = () => {
 
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoadig] = useState(true);
-  
+
     useEffect(() => {
-      fetch('https://645105d5a322196911587838.mockapi.io/items')
-        .then(res => res.json())
-        .then(res => {
-          setItems(res)
-          setIsLoadig(false)
-        })
-  
+        fetch('https://645105d5a322196911587838.mockapi.io/items')
+            .then(res => res.json())
+            .then(res => {
+                setItems(res)
+                setIsLoadig(false)
+            })
+        window.scrollTo(0, 0);
+
     }, [])
 
     return (
-        <>
+        <div className="container">
             <div className="content__top">
                 <Categories />
                 <Sort />
@@ -33,6 +34,6 @@ export const Home = () => {
                         : items.map(item => (<PizzaBlock key={item.id} {...item} />))
                 }
             </div>
-        </>
+        </div>
     )
 }
