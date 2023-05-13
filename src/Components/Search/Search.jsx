@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './Search.module.scss'
 import {BsSearch} from 'react-icons/bs'
 import {AiOutlineClose} from 'react-icons/ai'
+import { SearchContext } from '../../App'
 
-export const Search = ({searchValue, setSearchValue}) => {
+export const Search = () => {
+
+  const {searchValue, setSearchValue} = useContext(SearchContext);
+
   return (
     <div className={styles.root}>
       <BsSearch className={styles.icon} />
