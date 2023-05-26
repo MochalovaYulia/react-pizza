@@ -35,7 +35,7 @@ export const Home = () => {
         dispatch(setCurrentPage(num))
     }
 
-    // Если это первый рендер (проверка нужно ли вшивать параметры), то не нужно указывать URL-параметры 
+    // Если изменили URL-параметры и был первый рендер 
     useEffect(() => {
         if (isMounted.current) {
             const queryString = qs.stringify({
