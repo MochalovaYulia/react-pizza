@@ -1,20 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styles from './Search.module.scss'
 import { BsSearch } from 'react-icons/bs'
 import { AiOutlineClose } from 'react-icons/ai'
-import { SearchContext } from '../../App'
 import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import debounce from 'lodash.debounce'
+import { useDispatch } from 'react-redux'
+import { setSearchValue } from '../../redux/slices/FilterSlice'
 
 export const Search = () => {
+  const dispatch = useDispatch()
   const inputRef = useRef();
   const [value, setValue] = useState('');
-  const { setSearchValue } = useContext(SearchContext);
 
   const onClickClear = () => {
-    setSearchValue('')
+    dispatch(setSearchValue(''))
     setValue('')
     inputRef.current.focus();
   }
@@ -22,7 +23,7 @@ export const Search = () => {
   // сохранили ссылку на функцию и сделали ее отложенной, вызываем каждый раз когда меняется input
   const updateSearchValue = useCallback(
     debounce((value) => {
-      setSearchValue(value)
+      dispatch(setSearchValue(value))
     }, 1000),
     []
   )

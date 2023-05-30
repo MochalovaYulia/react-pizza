@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Categories } from '../Components/Categories';
 import { Sort } from '../Components/Sort';
 import { PizzaBlock } from '../Components/PizzaBlock';
 import qs from 'qs';
 import PizzaSkeleton from '../Components/PizzaSkeleton';
 import { Pagination } from '../Components/Pagination/Pagination';
-import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
 
@@ -18,6 +17,7 @@ export const Home = () => {
     const categoryId = useSelector(state => state.filter.categoryId);
     const sortType = useSelector(state => state.filter.sort)
     const currentPage = useSelector(state => state.filter.currentPage)
+    const searchValue = useSelector(state => state.filter.searchValue)
     const { items, status } = useSelector(state => state.pizza)
 
     const dispatch = useDispatch();
@@ -25,8 +25,6 @@ export const Home = () => {
 
     const isSearch = useRef(false)
     const isMounted = useRef(false)
-
-    const { searchValue } = useContext(SearchContext);
 
     const onChangeCategory = (id) => {
         dispatch(setCategoryId(id))
