@@ -13,7 +13,9 @@ export const CatrItems = ({ id, title, size, price, count, imageUrl, type }) => 
     }
 
     const onClickMinus = () => {
-        dispatch(minusItem(id))
+        if (count > 0) {
+            dispatch(minusItem(id))
+        }
     }
 
     const onClickClear = () => {

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
 
 import { list } from '../Components/Sort'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchPizzas } from '../redux/slices/PizzaSlice';
 
 export const Home = () => {
@@ -84,7 +84,11 @@ export const Home = () => {
     }
 
     const skeletons = [...new Array(6)].map((_, index) => (<PizzaSkeleton key={index} />));
-    const pizzas = items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()) ? true : false).map(item => (<PizzaBlock key={item.id} {...item} />))
+    const pizzas = items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()) ? true : false).map(item => (
+        <Link key={item.id} to={`/pizza/${item.id}`}>
+            <PizzaBlock {...item} />
+        </Link>
+    ))
 
     return (
         <div className="container">
