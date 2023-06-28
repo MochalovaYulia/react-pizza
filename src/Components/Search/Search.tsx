@@ -11,24 +11,26 @@ import { setSearchValue } from '../../redux/slices/FilterSlice'
 
 export const Search = () => {
   const dispatch = useDispatch()
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState('');
 
   const onClickClear = () => {
     dispatch(setSearchValue(''))
     setValue('')
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }
 
   // сохранили ссылку на функцию и сделали ее отложенной, вызываем каждый раз когда меняется input
   const updateSearchValue = useCallback(
-    debounce((value) => {
+    debounce((value: string) => {
       dispatch(setSearchValue(value))
     }, 1000),
     []
   )
 
-  const onChangeInput = event => {
+  const onChangeInput = (event: any) => {
     setValue(event.target.value)
     updateSearchValue(event.target.value)
   }
