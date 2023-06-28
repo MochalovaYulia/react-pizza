@@ -6,7 +6,7 @@ import qs from 'qs';
 import PizzaSkeleton from '../Components/PizzaSkeleton';
 import { Pagination } from '../Components/Pagination/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter, setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
+import { selectFilter, selectSort, setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
 
 import { list } from '../Components/Sort'
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +14,8 @@ import { fetchPizzas, selectPizza } from '../redux/slices/PizzaSlice';
 
 export const Home: React.FC = () => {
 
-    const {categoryId, sortType, currentPage, searchValue} = useSelector(selectFilter);
+    const {categoryId, currentPage, searchValue} = useSelector(selectFilter);
+    const sortType = useSelector(selectSort)
     const { items, status } = useSelector(selectPizza);
 
     const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import React from 'react'
 
 type CategoriesProps = {
     categoryId: number;
-    onChangeCategory: any;
+    onChangeCategory: (index: number) => void;
 }
 
 export const Categories: React.FC<CategoriesProps> = ({ categoryId, onChangeCategory }) => {
@@ -22,4 +22,4 @@ export const Categories: React.FC<CategoriesProps> = ({ categoryId, onChangeCate
             </ul>
         </div>
     )
-}
+} 
