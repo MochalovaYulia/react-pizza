@@ -10,3 +10,7 @@ export const store = configureStore({
         pizza: PizzaSlice, 
     },
 });
+
+type FuncType = typeof store.getState; //возвращает функцию (все хранилище)
+
+export type RootState = ReturnType<FuncType>; //берет функцию и превращает ее содержимое в тип
