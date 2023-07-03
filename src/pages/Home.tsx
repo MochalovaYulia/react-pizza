@@ -1,16 +1,18 @@
 import React, { useEffect, useRef } from 'react'
 import { Categories } from '../Components/Categories';
-import { Sort } from '../Components/Sort';
+import { Sorting } from '../Components/Sort';
 import { PizzaBlock } from '../Components/PizzaBlock';
 import qs from 'qs';
 import PizzaSkeleton from '../Components/PizzaSkeleton';
 import { Pagination } from '../Components/Pagination/Pagination';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectFilter, selectSort, setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
+import { SortItem } from "../Components/Sort";
 
 import { list } from '../Components/Sort'
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchPizzas, selectPizza } from '../redux/slices/PizzaSlice';
+import { FetchPizzasArgs, fetchPizzas, selectPizza } from '../redux/slices/PizzaSlice';
+import { useAppDispatch } from '../redux/store';
 
 export const Home: React.FC = () => {
 
@@ -18,7 +20,7 @@ export const Home: React.FC = () => {
     const sortType = useSelector(selectSort)
     const { items, status } = useSelector(selectPizza);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const isSearch = useRef(false)
@@ -48,13 +50,15 @@ export const Home: React.FC = () => {
     //  Если был первый рендер, то проверяем URL-параметры и сохраняем  в Redux
     useEffect(() => {
         if (window.location.search) {
-            const params = qs.parse(window.location.search.substring(1))
+            const params = qs.parse(window.location.search.substring(1)) as FetchPizzasArgs
 
-            const sort = list.find(obj => obj.sortProperty === params.sortProperty)
+            const sort = list.find(obj => obj.sortProperty === params.sortBy)
 
             dispatch(setFilter({
-                ...params,
-                sort
+                searchValue: params.search,
+                categoryId:Number(params.category),
+                currentPage: Number(params.currentPage),
+                sort: sort || list[0],
             }))
 
             isSearch.current = true;
@@ -70,14 +74,15 @@ export const Home: React.FC = () => {
         const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
         const sortBy = sortType.sortProperty.replace('-', '');
         const category = categoryId > 0 ? `category=${categoryId}` : '';
+        const search = searchValue ? `&search=${searchValue}` : '';
 
         dispatch(
-            // @ts-ignore
             fetchPizzas({
             order,
             sortBy,
             category,
-            currentPage
+            search,
+            currentPage: String(currentPage)
         }));
 
         window.scrollTo(0, 0)
@@ -85,16 +90,14 @@ export const Home: React.FC = () => {
 
     const skeletons = [...new Array(6)].map((_, index) => (<PizzaSkeleton key={index} />));
     const pizzas = items.filter((item: any) => item.title.toLowerCase().includes(searchValue.toLowerCase()) ? true : false).map((item: any) => (
-        <Link key={item.id} to={`/pizza/${item.id}`}>
-            <PizzaBlock {...item} />
-        </Link>
+        <PizzaBlock {...item} />
     ))
 
     return (
         <div className="container">
             <div className="content__top">
                 <Categories categoryId={categoryId} onChangeCategory={onChangeCategory} />
-                <Sort />
+                <Sorting />
             </div>
             <h2 className="content__title">Всe пиццы</h2>
             {

@@ -1,7 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
-import { CartItem } from "./CartSlice";
 
 type Pizza = {
     id: string;
@@ -12,7 +11,13 @@ type Pizza = {
     types: number[];
 }
 
-type FetchPizzasArgs = Record<string, string>;
+export type FetchPizzasArgs = {
+    order: string,
+    sortBy: string,
+    search: string, 
+    category: string,
+    currentPage: string
+};
 
 export enum Status {
     LOADING = 'loading',
@@ -30,9 +35,9 @@ const initialState: PizzaSliceState = {
     status: Status.LOADING,
 }
 
-export const fetchPizzas = createAsyncThunk('pizza/fetchPizzaStatus', async(params: FetchPizzasArgs) => {
-    const {order, sortBy, category, currentPage} = params
-    const {data} = await axios.get<Pizza[]>(`https://645105d5a322196911587838.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}`)
+export const fetchPizzas = createAsyncThunk<Pizza[], FetchPizzasArgs>('pizza/fetchPizzaStatus', async(params) => {
+    const {order, sortBy, search, category, currentPage} = params
+    const {data} = await axios.get<Pizza[]>(`https://645105d5a322196911587838.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&search=${search}`)
     return data;
 })
 
@@ -48,15 +53,15 @@ const PizzaSlice = createSlice({
         bilder.addCase(fetchPizzas.pending, (state) => {
             state.status = Status.LOADING
             state.items = []
-        }),
+        });
         bilder.addCase(fetchPizzas.fulfilled, (state, action) => {
             state.status = Status.SUCCESS
             state.items = action.payload
-        }),
+        });
         bilder.addCase(fetchPizzas.rejected, (state) => {
             state.status = Status.ERROR
             state.items = []
-        })
+        });
     }
     // extraReducers: {
     //     [fetchPizzas.pending]: (state) => {
