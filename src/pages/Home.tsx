@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback} from 'react'
 import { Categories } from '../Components/Categories';
 import { Sorting } from '../Components/Sort';
 import { PizzaBlock } from '../Components/PizzaBlock';
@@ -7,10 +7,8 @@ import PizzaSkeleton from '../Components/PizzaSkeleton';
 import { Pagination } from '../Components/Pagination/Pagination';
 import { useSelector } from 'react-redux';
 import { selectFilter, selectSort, setCategoryId, setCurrentPage, setFilter } from '../redux/slices/FilterSlice';
-import { SortItem } from "../Components/Sort";
-
 import { list } from '../Components/Sort'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FetchPizzasArgs, fetchPizzas, selectPizza } from '../redux/slices/PizzaSlice';
 import { useAppDispatch } from '../redux/store';
 
@@ -25,10 +23,10 @@ export const Home: React.FC = () => {
 
     const isSearch = useRef(false)
     const isMounted = useRef(false)
-
-    const onChangeCategory = (id: number) => {
+    
+    const onChangeCategory = useCallback((id: number) => {
         dispatch(setCategoryId(id))
-    }
+    }, [])
 
     const onChangePage = (num: number) => {
         dispatch(setCurrentPage(num))
@@ -90,7 +88,7 @@ export const Home: React.FC = () => {
 
     const skeletons = [...new Array(6)].map((_, index) => (<PizzaSkeleton key={index} />));
     const pizzas = items.filter((item: any) => item.title.toLowerCase().includes(searchValue.toLowerCase()) ? true : false).map((item: any) => (
-        <PizzaBlock {...item} />
+        <PizzaBlock key={item.id} {...item} />
     ))
 
     return (

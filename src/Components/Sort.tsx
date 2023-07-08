@@ -16,7 +16,7 @@ export const list: SortItem[] = [
     { name:'алфавиту (ASC)', sortProperty: sortPropertyEnum.TITLE_ASC }
 ]
 
-export const Sorting: React.FC = () => {
+export const Sorting: React.FC = React.memo(() => {
 
     const dispatch = useDispatch();
     const sort = useSelector(selectSort);
@@ -84,3 +84,4 @@ export const Sorting: React.FC = () => {
         </div>
     )
 }
+)
