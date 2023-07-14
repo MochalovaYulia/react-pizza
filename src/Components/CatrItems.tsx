@@ -56,7 +56,9 @@ export const CatrItems: React.FC<CatrItemsProps> = ({ id, title, size, price, co
                 </button>
             </div>
             <div className="cart__item-price">
-                <b>{price * count} ₽</b>
+                <b>{
+                    count * price
+                } ₽</b>
             </div>
             <div onClick={onClickClear} className="cart__item-remove">
                 <div className="button button--outline button--circle">
